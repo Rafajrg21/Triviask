@@ -1,11 +1,14 @@
 import React from 'react';
-import { createStackNavigator, createAppContainer } from 'react-navigation';
+import { createSwitchNavigator, createStackNavigator, createAppContainer } from 'react-navigation';
 import HomeScreen from './Components/HomeScreen/HomeScreen';
 import GameView from './Components/GameView/GameView';
 import HighScore from './Components/HighScore/HighScore';
 import Result from './Components/Result/Result';
+import AuthLoadingScreen from './Components/AuthLoadingScreen/AuthLoadingScreen';
+import SignInScreen from './Components/SignInScreen/SignInScreen';
+import SignUpScreen from './Components/SignUpScreen/SignUpScreen'
 
-const RootStack = createStackNavigator(
+const AppStack = createStackNavigator(
   {
     Home: HomeScreen,
     Game: GameView,
@@ -13,11 +16,48 @@ const RootStack = createStackNavigator(
     Result: Result
   },
   {
-    initialRouteName: 'Home'
+    initialRouteName: 'Home',
+    defaultNavigationOptions: {
+      headerStyle: {
+        backgroundColor: '#2e31e8',
+      },
+      headerTintColor: '#fff',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },  
+    },
   }
 );
 
-const AppContainer = createAppContainer(RootStack);
+const AuthStack = createStackNavigator(
+  { SignIn: SignInScreen ,
+    SignUp: SignUpScreen
+  },
+  {
+    initialRouteName: 'SignIn',
+    defaultNavigationOptions: {
+      headerStyle: {
+        backgroundColor: '#2e31e8',
+      },
+      headerTintColor: '#fff',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    }
+  }
+);
+
+const AppContainer = createAppContainer(createSwitchNavigator(
+    {
+      AuthLoading: AuthLoadingScreen,
+      App: AppStack,
+      Auth: AuthStack,
+    },
+    {
+      initialRouteName: 'AuthLoading',
+    }
+  )
+);
 
 export default class App extends React.Component {
   render() {
